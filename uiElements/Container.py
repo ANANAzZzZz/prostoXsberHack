@@ -1,9 +1,9 @@
 from uiElements.UiElement import UIElement
 from typing import List
-from Button import Button
-from Image import Image
-from TextField import TextField
-from EditTextField import EditTextField
+from uiElements.Button import Button
+from uiElements.Image import Image
+from uiElements.TextField import TextField
+from uiElements.EditTextField import EditTextField
 
 
 class Container(UIElement):

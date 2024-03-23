@@ -3,24 +3,29 @@ from flask import jsonify, request, session
 from uiElements.Button import Button
 from uiElements.UiElement import UIElement
 from uiElements.UIClick import UIClick
+from uiElements.Container import Container
 
 
-def convert_button_to_dict(button):
-    button_dict = {}
-    for attr in vars(button):
-        attr_value = getattr(button, attr)
-        if isinstance(attr_value, UIElement):
-            UIElement_dict = vars(attr_value)
-            button_dict[attr] = UIElement_dict
+def toDict(obj):
+    if not hasattr(obj,"__dict__"):
+        return obj
+    result = {}
+    for key, val in obj.__dict__.items():
+        if key.startswith("_"):
+            continue
+        element = []
+        if isinstance(val, list):
+            for item in val:
+                element.append(toDict(item))
         else:
-            button_dict[attr] = attr_value
-
-    return button_dict
+            element = toDict(val)
+        result[key] = element
+    return result
 
 
 @app.route("/")
 def index():
     test_button = Button(1, "test", "/", "stop")
+    test_container = Container(1, [], [], [test_button], [])
 
-    return convert_button_to_dict(test_button)
-
+    return toDict(test_container)
