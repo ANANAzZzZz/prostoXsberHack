@@ -4,10 +4,15 @@ from uiElements.Button import Button
 from uiElements.UiElement import UIElement
 from uiElements.UIClick import UIClick
 from uiElements.Container import Container
+from uiElements.Card import Card
+
+
+def getJsonResult(obj):
+    return {obj.__class__.__name__.lower(): toDict(obj)}
 
 
 def toDict(obj):
-    if not hasattr(obj,"__dict__"):
+    if not hasattr(obj, "__dict__"):
         return obj
     result = {}
     for key, val in obj.__dict__.items():
@@ -26,6 +31,6 @@ def toDict(obj):
 @app.route("/")
 def index():
     test_button = Button(1, "test", "/", "stop")
-    test_container = Container(1, [], [], [test_button], [])
+    test_card = Card(1, [], [], [test_button], [], "/", "play")
 
-    return toDict(test_container)
+    return getJsonResult(test_card)
