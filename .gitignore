@@ -5,3 +5,4 @@ Scripts
 __pycache__
 .idea
 Lib
+ngrok.exe
