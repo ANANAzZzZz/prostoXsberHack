@@ -107,10 +107,8 @@ def login():
         # Проверка совпадения хэш-пароля из бд и введенного пользователем
         if user_result is None or not check_password_hash(user_result[2], request.form['password']):
             return redirect('/login')
-
         id, login, password, role, is_banned = user_result
         # проверка на блоировку пользователя
-
         user = User(id, login, password, role)
         login_user(user, remember=login_form.remember_me.data)
         # переход на страницу пользователя
