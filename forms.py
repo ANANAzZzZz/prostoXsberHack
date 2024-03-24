@@ -5,7 +5,8 @@ from wtforms import (BooleanField, StringField, PasswordField, validators)
 # Форма регистрации
 class RegistrationForm(FlaskForm):
     username = StringField('Имя пользователя', [validators.Length(min=4, max=25), validators.InputRequired()])
-    email = StringField('E-mail', [validators.Length(min=6, max=100), validators.Email(), validators.InputRequired()])
+    name = StringField('Имя пользователя', [validators.Length(min=4, max=25), validators.InputRequired()])
+    lastname = StringField('Имя пользователя', [validators.Length(min=4, max=25), validators.InputRequired()])
 
     password = PasswordField('Пароль', [
         validators.InputRequired(),
