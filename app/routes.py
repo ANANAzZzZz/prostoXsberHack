@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask import request, redirect
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from werkzeug.security import check_password_hash
 
 from TypeButton import TypeButton
@@ -57,7 +57,9 @@ def login():
         id, username, password, name, lastname = user_result
         # проверка на блоировку пользователя
         user = User(id, username, password, name, lastname)
+        # print(login_user)
         login_user(user, remember=login_form.remember_me.data)
+        print(user_result)
         # переход на страницу пользователя
         return getJsonResult(FlowNavigation([Screen(
             LazyColumn(
@@ -67,7 +69,7 @@ def login():
                          texts_par=[
                              TextField(
                                  0,
-                                 "Привет, " + user.name + " " + user.lastname
+                                 "Привет, " + user_result['name'] + " " + user_result['lastname']
                              )
                          ],
                          route_par="",
@@ -572,6 +574,7 @@ mainFlow = FlowNavigation([Screen(
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
+        print(request.form['name'] + request.form['lastname'])
         if db.getUserByLogin(request.form["username"]):
             print("Пользователь существует")
             return jsonify(message="Пользователь существует"), 401
@@ -579,6 +582,7 @@ def register():
             print("неудачная попытка регистрации")
             return jsonify(message='неудачная попытка регистрации'), 401
         print("пользователь зарегистрирован")
+
         return getJsonResult(FlowNavigation([Screen(
             LazyColumn(
                 0,
