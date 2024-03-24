@@ -54,13 +54,10 @@ def login():
         # Проверка совпадения хэш-пароля из бд и введенного пользователем
         if user_result is None or not check_password_hash(user_result['password'], request.form['password']):
             return jsonify(message='Неверные учетные данные'), 401
+
         id, username, password, name, lastname = user_result
-        # проверка на блоировку пользователя
         user = User(id, username, password, name, lastname)
-        # print(login_user)
         login_user(user, remember=login_form.remember_me.data)
-        print(user_result)
-        # переход на страницу пользователя
         return getJsonResult(FlowNavigation([Screen(
             LazyColumn(
                 0,
