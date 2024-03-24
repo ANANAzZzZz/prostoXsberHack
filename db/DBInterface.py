@@ -67,3 +67,10 @@ class DBInterface:
         except:
             print("При добавлении пользователя возникла ошибка")
             return False
+
+    def getTrack(self):
+        db_client = pymongo.MongoClient("mongodb://localhost:27017/")
+        current_db = db_client["prostoXsberHack"]
+        collection = current_db["tracks"]
+        result = collection.find()
+        return result

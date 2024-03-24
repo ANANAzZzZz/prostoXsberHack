@@ -126,6 +126,7 @@ def logout():
 @app.route('/navigation')
 def navigation():
 
+
     """
     Navigation(
         listOf(
@@ -296,7 +297,7 @@ def navigation():
         "splash"
     )
     """
-
+    
     return "we logged in"
 
 
