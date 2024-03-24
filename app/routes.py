@@ -1,6 +1,7 @@
 from app import app, db
 from flask import jsonify, request, session
 from uiElements.Button import Button
+from uiElements.FlowNavigation import FlowNavigation
 from uiElements.UiElement import UIElement
 from uiElements.UIClick import UIClick
 from uiElements.Container import Container
@@ -16,7 +17,7 @@ from flask import render_template, url_for, request, flash, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from user import User
 from forms import LoginForm, RegistrationForm
-from TypeButton import  TypeButton
+from TypeButton import TypeButton
 from uiElements.Image import Image
 
 
@@ -57,7 +58,8 @@ def login():
         user = User(id, username, password, name, lastname)
         login_user(user, remember=login_form.remember_me.data)
         # переход на страницу пользователя
-        return jsonify(message='Пользователь авторизован'), 200
+        return getJsonResult(mainFlow)
+        #jsonify(message='Пользователь авторизован'), 200
     return jsonify(message='Пост запрос не выполнен'), 400
 
 
@@ -67,11 +69,136 @@ def logout():
     return redirect("/")
 
 
+@app.route('/getStartFlow')
+def getStartFlow():
+    startFlow = FlowNavigation([
+        Screen(
+            LazyColumn(
+                0,
+                [
+                    Column(
+                        ord_par=0,
+                        buttons_par=[
+                            Button(
+                                1,
+                                "Начать",
+                                "",
+                                TypeButton.Navigate.name,
+                                "login"
+                            )
+                        ],
+                        texts_par=[],
+                        edits_par=[],
+                        images_par=[Image(0, "https://i.ibb.co/vHF7c5J/LOGO11.png")]
+                    )
+                ]
+            ),
+            "Splash",
+            "splash",
+            parameters_par=[]
+        ),
+        Screen(
+            LazyColumn(
+                0,
+                [
+                    Column(
+                        ord_par=0,
+                        edits_par=[
+                            EditTextField(
+                                0,
+                                "",
+                                "username",
+                                "Логин"
+                            ), EditTextField(
+                                1,
+                                "",
+                                "password",
+                                "Пароль"
+                            )
+                        ],
+                        texts_par=[],
+                        buttons_par=[
+                            Button(
+                                2,
+                                "Вход",
+                                "login",
+                                TypeButton.Create.name + "/" + TypeButton.Navigate.name,
+                                "main"
+                            ),
+                            Button(
+                                3,
+                                "Зарегистрироваться",
+                                "",
+                                TypeButton.Navigate.name,
+                                "authorization"
+                            )
+                        ],
+                        images_par=[]
+                    )
+                ]
+            ),
+            "Вход",
+            "login",
+            []
+        ),
+        Screen(
+            LazyColumn(
+                0,
+                [
+                    Column(
+                        ord_par=0,
+                        edits_par=[
+                            EditTextField(
+                                0,
+                                "",
+                                "username",
+                                "Логин"
+                            ),
+                            EditTextField(
+                                1,
+                                "",
+                                "password",
+                                "Пароль"
+                            ),
+                            EditTextField(
+                                2,
+                                "",
+                                "name",
+                                "Имя"
+                            ),
+                            EditTextField(
+                                3,
+                                "",
+                                "lastname",
+                                "Фамилия"
+                            ),
+                        ],
+                        texts_par=[],
+                        buttons_par=[
+                            Button(
+                                4,
+                                "Зарегестрироваться",
+                                "register",
+                                TypeButton.Create.name + "/" + TypeButton.Navigate.name,
+                                "main"
+                            )
+                        ],
+                        images_par=[]
+                    )
+                ]
+            ),
+            "Авторизация",
+            "authorization",
+            []
+        )], "splash", "startFlow")
+
+    return getJsonResult(startFlow)
+
+
 @app.route('/navigation')
 def navigation():
-
     mainNavigation = Navigation(
-        [
+        [FlowNavigation([
             Screen(
                 LazyColumn(
                     0,
@@ -191,25 +318,25 @@ def navigation():
                 "Авторизация",
                 "authorization",
                 []
-            ),
-            Screen(
+            )], "splash", "startFlow"),
+            FlowNavigation([Screen(
                 LazyColumn(
                     0,
                     [
                         Card(ord_par=0,
-                            texts_par=[
-                                TextField(
-                                    0,
-                                    "Привет, penis"
-                                )
-                            ],
-                            route_par="",
-                            type_par="",
-                            route_navigation_par="",
-                            images_par=[],
-                            edits_par=[],
-                            buttons_par=[]
-                        ),
+                             texts_par=[
+                                 TextField(
+                                     0,
+                                     "Привет, penis"
+                                 )
+                             ],
+                             route_par="",
+                             type_par="",
+                             route_navigation_par="",
+                             images_par=[],
+                             edits_par=[],
+                             buttons_par=[]
+                             ),
                         LazyColumn(
                             0,
                             [
@@ -222,11 +349,45 @@ def navigation():
                 "main",
                 []
             ),
+            ], "main", "mainFlow")
         ],
-        "splash"
+        "startFlow"
     )
 
     return getJsonResult(mainNavigation)
+
+
+mainFlow = FlowNavigation([Screen(
+    LazyColumn(
+        0,
+        [
+            Card(ord_par=0,
+                 texts_par=[
+                     TextField(
+                         0,
+                         "Привет, penis"
+                     )
+                 ],
+                 route_par="",
+                 type_par="",
+                 route_navigation_par="",
+                 images_par=[],
+                 edits_par=[],
+                 buttons_par=[]
+                 ),
+            LazyColumn(
+                0,
+                [
+                    TextField(0, "Треки")
+                ]
+            )
+        ],
+    ),
+    "Главный экран",
+    "main",
+    []
+),
+], "main", "mainFlow")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -242,5 +403,6 @@ def register():
             print("неудачная попытка регистрации")
             return jsonify(message='неудачная попытка регистрации'), 401
         print("пользователь зарегистрирован")
-        return jsonify(message='пользователь зарегистрирован'), 200
+        return getJsonResult(mainFlow)
+        # jsonify(message='пользователь зарегистрирован'), 200
     return jsonify(message='Пост запрос не выполнен'), 400
