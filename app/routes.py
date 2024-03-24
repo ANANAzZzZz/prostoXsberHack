@@ -102,17 +102,19 @@ def index():
 def login():
     login_form = LoginForm()
 
-    if login_form.validate_on_submit():
+    if request.method == "POST":
         user_result = db.getUserByLogin(request.form['username'])
+
         # Проверка совпадения хэш-пароля из бд и введенного пользователем
-        if user_result is None or not check_password_hash(user_result[2], request.form['password']):
-            return redirect('/login')
-        id, login, password, role, is_banned = user_result
+        if user_result is None or not check_password_hash(user_result['password'], request.form['password']):
+            return "login has been failed"
+        id, login, password, role = user_result
         # проверка на блоировку пользователя
         user = User(id, login, password, role)
         login_user(user, remember=login_form.remember_me.data)
         # переход на страницу пользователя
-    return redirect('/main')
+        return redirect('/main')
+    return "Post has been evaided"
 
 
 @app.route('/logout')
@@ -123,4 +125,4 @@ def logout():
 
 @app.route('/main')
 def main():
-    print('...')
+    return "we logged in"
