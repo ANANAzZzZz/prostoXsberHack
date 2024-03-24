@@ -107,14 +107,14 @@ def login():
 
         # Проверка совпадения хэш-пароля из бд и введенного пользователем
         if user_result is None or not check_password_hash(user_result['password'], request.form['password']):
-            return "login has been failed"
+            return jsonify(message='Неверные учетные данные'), 401
         id, login, password, role = user_result
         # проверка на блоировку пользователя
         user = User(id, login, password, role)
         login_user(user, remember=login_form.remember_me.data)
         # переход на страницу пользователя
-        return redirect('/main')
-    return "Post has been evaided"
+        return jsonify(message='Пользователь авторизован'), 200
+    return jsonify(message='Пост запрос не выполнен'), 400
 
 
 @app.route('/logout')
@@ -126,3 +126,14 @@ def logout():
 @app.route('/main')
 def main():
     return "we logged in"
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == "POST":
+        if not db.addUser(request):
+            print("неудачная попытка регистрации")
+            return jsonify(message='неудачная попытка регистрации'), 401
+        print("пользователь зарегистрирован")
+        return jsonify(message='пользователь зарегистрирован'), 200
+    return jsonify(message='Пост запрос не выполнен'), 400
