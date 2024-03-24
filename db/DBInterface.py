@@ -46,18 +46,18 @@ class DBInterface:
             return None
         return result
 
-    def addUser(self, form):
+    def addUser(self, request):
         try:
-            hash_password = generate_password_hash(form["password"])
+            hash_password = generate_password_hash(request.form["password"])
 
             db_client = pymongo.MongoClient("mongodb://localhost:27017/")
             current_db = db_client["prostoXsberHack"]
             collection = current_db["user"]
             pylounge = {
-                "username": form["username"],
+                "username": request.form["username"],
                 "password": hash_password,
-                "name": form["name"],
-                "lastname": form["lastname"]
+                "name": request.form["name"],
+                "lastname": request.form["lastname"]
             }
             result = collection.insert_one(pylounge)
             print(result)
@@ -67,7 +67,6 @@ class DBInterface:
         except:
             print("При добавлении пользователя возникла ошибка")
             return False
-
 
     def getTrack(self):
         db_client = pymongo.MongoClient("mongodb://localhost:27017/")
