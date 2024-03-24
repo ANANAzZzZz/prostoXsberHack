@@ -12,7 +12,7 @@ from uiElements.EditTextField import EditTextField
 from uiElements.Navigation import Navigation
 from flask_login import current_user, login_user, logout_user
 from flask import render_template, url_for, request, flash, redirect
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from user import User
 from forms import LoginForm, RegistrationForm
 
@@ -94,7 +94,7 @@ def index():
         ],
         start_route_par="test"
     )
-
+    print(generate_password_hash('abba'))
     return getJsonResult(mainNavigation)
 
 
@@ -106,21 +106,13 @@ def login():
         user_result = db.getUserByLogin(request.form['username'])
         # Проверка совпадения хэш-пароля из бд и введенного пользователем
         if user_result is None or not check_password_hash(user_result[2], request.form['password']):
-            #flash('Неверное имя пользователя или пароль', 'error')
             return redirect('/login')
-
         id, login, password, role, is_banned = user_result
         # проверка на блоировку пользователя
-        if user_result[4]:
-            #flash('Данный пользователь заблокирован администратором', 'error')
-            return redirect('/login')
-
         user = User(id, login, password, role)
         login_user(user, remember=login_form.remember_me.data)
-        #flash(f'Вы успешно авторизованы, {current_user.login}', 'success')
         # переход на страницу пользователя
-        return redirect('/main')
-    return render_template('login.html', title='Авторизация', form=login_form)
+    return redirect('/main')
 
 
 @app.route('/logout')
