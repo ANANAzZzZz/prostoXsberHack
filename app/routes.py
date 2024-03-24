@@ -101,8 +101,8 @@ def logout():
 
 @app.route('/getStartFlow')
 def getStartFlow():
-    param = request.form['param']
-    if param == "mobile":
+    param = request.args
+    if param.get('param') == "mobile":
         return getJsonResult(FlowNavigation([
         Screen(
             LazyColumn(
