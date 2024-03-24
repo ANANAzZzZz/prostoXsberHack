@@ -10,11 +10,14 @@ from uiElements.LazyColumn import LazyColumn
 from uiElements.TextField import TextField
 from uiElements.EditTextField import EditTextField
 from uiElements.Navigation import Navigation
+from uiElements.Column import Column
 from flask_login import current_user, login_user, logout_user
 from flask import render_template, url_for, request, flash, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from user import User
 from forms import LoginForm, RegistrationForm
+from TypeButton import  TypeButton
+from uiElements.Image import Image
 
 
 def getJsonResult(obj):
@@ -37,65 +40,6 @@ def toDict(obj):
             element = toDict(val)
         result[key] = element
     return result
-
-
-@app.route("/")
-def index():
-    mainNavigation = Navigation(
-        screens_par=[
-            Screen(
-                content_par=LazyColumn(0,
-                                       [
-                                           Card(
-                                               ord_par=0,
-                                               texts_par=[TextField(0, "Проверка123")],
-                                               edits_par=[
-                                                   EditTextField(2, "Привет", "hello", "test"),
-                                                   EditTextField(1, "Пока", "hello1", "test23")
-                                               ],
-                                               buttons_par=[
-                                                   Button(
-                                                       2,
-                                                       "Проверка",
-                                                       "test",
-                                                       "Navigate"
-                                                   )
-                                               ],
-                                               images_par=[],
-                                               route_par="",
-                                               type_par=""
-                                           ),
-
-                                           Card(
-                                               ord_par=0,
-                                               texts_par=[TextField(0, "Проверка12")],
-                                               edits_par=[
-                                                   EditTextField(2, "Привет", "hello", "test"),
-                                                   EditTextField(1, "Пока", "hello1", "test23")
-                                               ],
-                                               buttons_par=[
-                                                   Button(
-                                                       2,
-                                                       "Проверка",
-                                                       "",
-                                                       "Create"
-                                                   )
-                                               ],
-                                               images_par=[],
-                                               route_par="",
-                                               type_par=""
-                                           ),
-                                       ]
-                                       ),
-                title_par="Test1",
-                route_par="test",
-                parameters_par=[]
-            )
-        ],
-        start_route_par="test"
-    )
-    print(generate_password_hash('abba'))
-    return getJsonResult(mainNavigation)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -126,179 +70,163 @@ def logout():
 @app.route('/navigation')
 def navigation():
 
-
-    """
-    Navigation(
-        listOf(
+    mainNavigation = Navigation(
+        [
             Screen(
                 LazyColumn(
-                    listOf(
+                    0,
+                    [
                         Column(
-                            buttons = listOf(
+                            ord_par=0,
+                            buttons_par=[
                                 Button(
+                                    1,
                                     "Начать",
                                     "",
-                                    "login",
                                     TypeButton.Navigate.name,
-                                    1
+                                    "login"
                                 )
-                            ),
-                            texts = listOf(),
-                            edits = listOf(),
-                            images = listOf(Image("https://i.ibb.co/vHF7c5J/LOGO11.png", 0))
+
+                            ],
+                            texts_par=[],
+                            edits_par=[],
+                            images_par=[Image(0, "https://i.ibb.co/vHF7c5J/LOGO11.png")]
                         )
-                    ),
+                    ]
                 ),
                 "Splash",
-                "splash"
+                "splash",
+                parameters_par=[]
             ),
             Screen(
                 LazyColumn(
-                    listOf(
+                    0,
+                    [
                         Column(
-                            edits = listOf(
+                            ord_par=0,
+                            edits_par=[
                                 EditTextField(
+                                    0,
                                     "",
                                     "username",
-                                    "Логин",
-                                    0
-                                ),
-                                EditTextField(
+                                    "Логин"
+                                ), EditTextField(
+                                    1,
                                     "",
                                     "password",
-                                    "Пароль",
-                                    1
+                                    "Пароль"
                                 )
-                            ),
-                            texts = listOf(),
-                            buttons = listOf(
+                            ],
+                            texts_par=[],
+                            buttons_par=[
                                 Button(
+                                    2,
                                     "Вход",
                                     "login",
-                                    "main",
                                     TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                    2
+                                    "main"
                                 ),
                                 Button(
-                                    "Зарегестрироваться",
+                                    3,
+                                    "Зарегистрироваться",
                                     "",
-                                    "authorization",
                                     TypeButton.Navigate.name,
-                                    3
+                                    "authorization"
                                 )
-                            ),
-                            images = listOf()
+                            ],
+                            images_par=[]
                         )
-                    ),
+                    ]
                 ),
                 "Вход",
-                "login"
+                "login",
+                []
             ),
             Screen(
                 LazyColumn(
-                    listOf(
+                    0,
+                    [
                         Column(
-                            edits = listOf(
+                            ord_par=0,
+                            edits_par=[
                                 EditTextField(
+                                    0,
                                     "",
                                     "username",
-                                    "Логин",
-                                    0
+                                    "Логин"
                                 ),
                                 EditTextField(
+                                    1,
                                     "",
                                     "password",
-                                    "Пароль",
-                                    1
+                                    "Пароль"
                                 ),
                                 EditTextField(
+                                    2,
                                     "",
                                     "name",
-                                    "Имя",
-                                    2
+                                    "Имя"
                                 ),
                                 EditTextField(
+                                    3,
                                     "",
                                     "lastname",
-                                    "Фамилия",
-                                    3
-                                )
-                            ),
-                            texts = listOf(),
-                            buttons = listOf(
+                                    "Фамилия"
+                                ),
+                            ],
+                            texts_par=[],
+                            buttons_par=[
                                 Button(
+                                    4,
                                     "Зарегестрироваться",
                                     "register",
-                                    "main",
                                     TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                    4,
+                                    "main"
                                 )
-                            ),
-                            images = listOf()
+                            ],
+                            images_par=[]
                         )
-                    ),
+                    ]
                 ),
                 "Авторизация",
-                "authorization"
+                "authorization",
+                []
             ),
             Screen(
                 LazyColumn(
-                    listOf(
-                        Card(
-                            texts = listOf(
+                    0,
+                    [
+                        Card(ord_par=0,
+                            texts_par=[
                                 TextField(
-                                    "Привет," + "user's name + lastname",
-                                    0
+                                    0,
+                                    "Привет, penis"
                                 )
-                            ),
-                            route = "",
-                            type = "",
-                            routeNavigation = ""
+                            ],
+                            route_par="",
+                            type_par="",
+                            route_navigation_par="",
+                            images_par=[],
+                            edits_par=[],
+                            buttons_par=[]
                         ),
-
                         LazyColumn(
-                            listOf(
-                                TextField("Треки", 0)
-                            )
+                            0,
+                            [
+                                TextField(0, "Треки")
+                            ]
                         )
-                    ),
+                    ],
                 ),
                 "Главный экран",
-                "main"
+                "main",
+                []
             ),
-            Screen(
-                LazyColumn(
-                    listOf(
-
-                    ),
-                ),
-                "Test1",
-                "trek/{id}",
-            ),
-            Screen(
-                LazyColumn(
-                    listOf(
-
-                    ),
-                ),
-                "Test1",
-                "test"
-            ),
-            Screen(
-                LazyColumn(
-                    listOf(
-
-                    ),
-                ),
-                "Test1",
-                "test1"
-            )
-        ),
+        ],
         "splash"
     )
-    """
-    
-    return "we logged in"
+
+    return getJsonResult(mainNavigation)
 
 
 @app.route('/register', methods=['GET', 'POST'])
