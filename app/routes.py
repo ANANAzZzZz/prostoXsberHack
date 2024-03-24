@@ -304,7 +304,13 @@ def navigation():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
-        if not db.addUser(request):
+        form = RegistrationForm(request.form)
+        if not form.validate_on_submit():
+            return jsonify("bad request"), 400
+        user = db.getUserByLogin(form['username'])
+        if user:
+            return jsonify("User already exists"), 400
+        if not db.addUser(form):
             print("неудачная попытка регистрации")
             return jsonify(message='неудачная попытка регистрации'), 401
         print("пользователь зарегистрирован")
