@@ -1,25 +1,23 @@
-from app import app, db
-from flask import jsonify, request, session
-from uiElements.Button import Button
-from uiElements.FlowNavigation import FlowNavigation
-from uiElements.UiElement import UIElement
-from uiElements.UIClick import UIClick
-from uiElements.Container import Container
-from uiElements.Card import Card
-from uiElements.Screen import Screen
-from uiElements.LazyColumn import LazyColumn
-from uiElements.TextField import TextField
-from uiElements.EditTextField import EditTextField
-from uiElements.Navigation import Navigation
-from uiElements.Column import Column
-from uiElements.Row import Row
-from flask_login import current_user, login_user, logout_user
-from flask import render_template, url_for, request, flash, redirect
-from werkzeug.security import check_password_hash, generate_password_hash
-from user import User
-from forms import LoginForm, RegistrationForm
+from flask import jsonify
+from flask import request, redirect
+from flask_login import login_user, logout_user
+from werkzeug.security import check_password_hash
+
 from TypeButton import TypeButton
+from app import app, db
+from forms import LoginForm
+from uiElements.Button import Button
+from uiElements.Card import Card
+from uiElements.Column import Column
+from uiElements.EditTextField import EditTextField
+from uiElements.FlowNavigation import FlowNavigation
 from uiElements.Image import Image
+from uiElements.LazyColumn import LazyColumn
+from uiElements.Navigation import Navigation
+from uiElements.Row import Row
+from uiElements.Screen import Screen
+from uiElements.TextField import TextField
+from user import User
 
 
 def getJsonResult(obj):
@@ -47,6 +45,7 @@ def toDict(obj):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
+    treks = db.getTrack()
 
     if request.method == "POST":
         user_result = db.getUserByLogin(request.form['username'])
@@ -80,7 +79,26 @@ def login():
                     LazyColumn(
                         0,
                         [
-                            TextField(0, "Треки")
+                            TextField(0, "Треки"),
+                            LazyColumn(1, list(
+                                map(
+                                    lambda task: Card(
+                                        0,
+                                        [],
+                                        [],
+                                        [],
+                                        [],
+                                        "",
+                                        "",
+                                        "",
+                                        Row(
+                                            0,
+                                            [TextField(1, task["name"])],
+                                            [],
+                                            [],
+                                            [Image(0, task["image"])]
+                                        )
+                                    ), treks)))
                         ]
                     )
                 ],
@@ -499,8 +517,9 @@ def navigation():
                         LazyColumn(
                             0,
                             [
-                                TextField(0, "Треки")
-                            ]
+                                TextField(0, "Треки"),
+                                LazyColumn(1, [])
+                            ],
                         )
                     ],
                 ),
@@ -580,7 +599,8 @@ def register():
                     LazyColumn(
                         0,
                         [
-                            TextField(0, "Треки")
+                            TextField(0, "Треки"),
+                            LazyColumn(1, [])
                         ]
                     )
                 ],
