@@ -108,9 +108,9 @@ def login():
         # Проверка совпадения хэш-пароля из бд и введенного пользователем
         if user_result is None or not check_password_hash(user_result['password'], request.form['password']):
             return jsonify(message='Неверные учетные данные'), 401
-        id, login, password, role = user_result
+        id, username, password, name, lastname = user_result
         # проверка на блоировку пользователя
-        user = User(id, login, password, role)
+        user = User(id, username, password, name, lastname)
         login_user(user, remember=login_form.remember_me.data)
         # переход на страницу пользователя
         return jsonify(message='Пользователь авторизован'), 200

@@ -39,7 +39,7 @@ class DBInterface:
         db_client = pymongo.MongoClient("mongodb://localhost:27017/")
         current_db = db_client["prostoXsberHack"]
         collection = current_db["user"]
-        result = collection.find_one({"name": username})
+        result = collection.find_one({"username": username})
 
         if not result:
             print('Пользователь не найден')
@@ -54,9 +54,10 @@ class DBInterface:
             current_db = db_client["prostoXsberHack"]
             collection = current_db["user"]
             pylounge = {
-                "name": request.form["username"],
+                "username": request.form["username"],
                 "password": hash_password,
-                "role": request.form["role"]
+                "name": request.form["name"],
+                "lastname": request.form["lastname"]
             }
             result = collection.insert_one(pylounge)
             print(result)
