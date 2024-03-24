@@ -1,4 +1,4 @@
-import Screen
+from uiElements.Screen import Screen
 from typing import List
 
 
