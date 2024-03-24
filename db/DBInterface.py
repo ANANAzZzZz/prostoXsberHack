@@ -71,6 +71,8 @@ class DBInterface:
     def getTrack(self):
         db_client = pymongo.MongoClient("mongodb://localhost:27017/")
         current_db = db_client["prostoXsberHack"]
-        collection = current_db["tracks"]
-        result = collection.find()
+        collection = current_db["track"]
+
+        result = list(collection.find())
+
         return result

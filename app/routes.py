@@ -46,6 +46,7 @@ def toDict(obj):
 def login():
     login_form = LoginForm()
     treks = db.getTrack()
+    print(treks)
 
     if request.method == "POST":
         user_result = db.getUserByLogin(request.form['username'])
