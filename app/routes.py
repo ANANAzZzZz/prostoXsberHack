@@ -155,7 +155,7 @@ def getStartFlow():
                                 "Вход",
                                 "login",
                                 TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                "main"
+                                "mainFlow"
                             ),
                             Button(
                                 3,
@@ -212,7 +212,7 @@ def getStartFlow():
                                 "Зарегестрироваться",
                                 "register",
                                 TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                "main"
+                                "mainFlow"
                             )
                         ],
                         images_par=[]
@@ -276,7 +276,7 @@ def getStartFlow():
                                 "Вход",
                                 "login",
                                 TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                "main"
+                                "mainFlow"
                             ),
                             Button(
                                 3,
@@ -333,7 +333,7 @@ def getStartFlow():
                                 "Зарегестрироваться",
                                 "register",
                                 TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                "main"
+                                "mainFlow"
                             )
                         ],
                         images_par=[]
@@ -402,7 +402,7 @@ def navigation():
                                     "Вход",
                                     "login",
                                     TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                    "main"
+                                    "mainFlow"
                                 ),
                                 Button(
                                     3,
@@ -459,7 +459,7 @@ def navigation():
                                     "Зарегестрироваться",
                                     "register",
                                     TypeButton.Create.name + "/" + TypeButton.Navigate.name,
-                                    "main"
+                                    "mainFlow"
                                 )
                             ],
                             images_par=[]
