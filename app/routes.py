@@ -123,8 +123,8 @@ def logout():
     return redirect("/")
 
 
-@app.route('/main')
-def main():
+@app.route('/navigation')
+def navigation():
     return "we logged in"
 
 
